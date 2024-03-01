@@ -38,6 +38,12 @@ let cart: [ProductInfo] = [
     (productName: "Asus ROG Strix B550-E Gaming", price: 8703.0, currency: "₴", socet: "sAM4", processor: "AMD")
 ]
 
+
+let separatorLine = "\n-----------------------------------------------"
+
+func printSeparatorLine()  {
+    print("\n-----------------------------------------------")
+}
 /*
  
  Пункт 1.1
@@ -58,6 +64,18 @@ let cart: [ProductInfo] = [
 
 
 
+for (index, product) in cart.enumerated() {
+    let productName = product.0
+    let productPrice = product.1
+    let productCurrency = product.2
+    let productSocet = product.3
+    let productProcessor = product.4
+    
+    print("------------------- \(index + 1) -------------------------------")
+    print("Назва товару: \(productName), Ціна: \(productPrice) \(productCurrency)")
+    print("Сокет: \(productSocet), Процессор: \(productProcessor)")
+    printSeparatorLine()
+}
 
 /*
  
@@ -77,6 +95,15 @@ let cart: [ProductInfo] = [
  */
 
 
+for (index, product) in cart.enumerated() {
+    let productName = product.0
+    let productProcessor = product.4
+    
+    print("------------------- \(index + 1) -------------------------------")
+    print("Назва товару: \(productName)")
+    print("Процессор: \(productProcessor)")
+    printSeparatorLine()
+}
 
 
 
@@ -97,7 +124,20 @@ let cart: [ProductInfo] = [
     ------------------------------------------------------
  */
 
+var whileCounter = 0
 
+while whileCounter < cart.count {
+    let productName = cart[whileCounter].0
+    let productPrice = cart[whileCounter].1
+    let productCurrency = cart[whileCounter].2
+    
+    print("------------------- \(whileCounter + 1) -------------------------------")
+    print("Назва товару: \(productName)")
+    print("Ціна: \(productPrice) \(productCurrency)")
+    printSeparatorLine()
+    
+    whileCounter = whileCounter + 1
+}
 
 
 
@@ -117,6 +157,22 @@ let cart: [ProductInfo] = [
     Сокет: s1151
     ------------------------------------------------------
  */
+
+var repeatWhileCounter = 0
+
+repeat {
+    let productInfo = cart[repeatWhileCounter]
+    let productName = productInfo.0
+    let productSocet = productInfo.3
+    
+    print("------------------- \(repeatWhileCounter + 1) -------------------------------")
+    print("Назва товару: \(productName)")
+    print("Сокет: \(productSocet)")
+    printSeparatorLine()
+    
+    repeatWhileCounter += 1
+    
+} while repeatWhileCounter < cart.count
 
 
 
@@ -150,6 +206,20 @@ let cart: [ProductInfo] = [
     Сокет: s1151
     ------------------------------------------------------
  */
+
+for (index, product) in cart.enumerated() {
+    let productName = product.0
+    let productPrice = product.1
+    let productCurrency = product.2
+    let productSocet = product.3
+    
+    if productPrice < 5000.00 && productSocet == "s1151" {
+        print("------------------- \(index + 1) -------------------------------")
+        print("Назва товару: \(productName), Ціна: \(productPrice) \(productCurrency)")
+        print("Сокет: \(productSocet)")
+        printSeparatorLine()
+    }
+}
 
 
 
@@ -199,7 +269,31 @@ let cart: [ProductInfo] = [
     
  */
 
+func print(productInfo: ProductInfo) {
+    
+}
 
+for (index, product) in cart.enumerated() {
+    let productName = product.0
+    let productPrice = product.1
+    let productCurrency = product.2
+    let productProcessor = product.4
+    
+    let processorStringValue = productProcessor
+    
+    print("------------------- \(index + 1) -------------------------------")
+    print("Назва товару: \(productName), Ціна: \(productPrice) \(productCurrency)")
+    
+    switch processorStringValue {
+    case "Intel":
+        print("Процесор: \(productProcessor)")
+    case "AMD":
+        print("Процесор: \(productProcessor)")
+    default: break
+    }
+
+    printSeparatorLine()
+}
 
 /*
  
@@ -237,6 +331,20 @@ let cart: [ProductInfo] = [
  
  */
 
+func printIntelProcessor() {
+    for (index, product) in cart.enumerated() {
+        let productName = product.0
+        let productProcessorName = product.4
+    
+        if productProcessorName == "Intel" {
+            print("------------------- Intel -------------------------------")
+            print("\(index + 1) Назва товару: \(productName)")
+            printSeparatorLine()
+        }
+    }
+}
+
+printIntelProcessor()
 
 
 
@@ -269,8 +377,28 @@ let cart: [ProductInfo] = [
  
  */
 
+func printLowestPriceProductTitleText(maxPrice: Double) {
+    let maxPriceString = String(format: "%.2f", maxPrice)
+    print("------------------- Товари з ціною менше \(maxPriceString) -------------------------------")
+}
 
+func printLowestPriceProducts(maxPrice: Double) {
+    printLowestPriceProductTitleText(maxPrice: maxPrice)
+    
+    for (index, product) in cart.enumerated() {
+        let productName = product.0
+        let productPrice = product.1
+        let productCurrency = product.2
+        
+        if productPrice < maxPrice {
+            print("\(index + 1) Назва товару: \(productName), Ціна: \(productPrice) \(productCurrency)")
+            printSeparatorLine()
+        }
+    }
+}
+let maxPrice = 4500.00
 
+printLowestPriceProducts(maxPrice: 4000)
 
 
 
@@ -296,9 +424,41 @@ let cart: [ProductInfo] = [
  
  */
 
+func getMostExpensiveProductInfo(processor: String) -> ProductInfo? {
+    var mostExpensiveProduct: ProductInfo?
+    var maxPrice: Double = 0.0
+    
+    for product in cart {
+        let productPrice = product.1
+        let productProcessor = product.4
+
+        if productProcessor == processor && productPrice > maxPrice {
+            mostExpensiveProduct = product
+            maxPrice = productPrice
+        }
+    }
+    
+    return mostExpensiveProduct
+}
+
+// Другий варіант, можливо не такий ефективний, як перший
+
+func getMostExpensiveProductInfo2(processor: String) -> ProductInfo? {
+    cart.filter { $0.4 == processor }
+        .sorted { $0.1 > $1.1 }
+        .first
+}
+
+if let mostExpensiveProduct = getMostExpensiveProductInfo(processor: "AMD") {
+    printMostExpensiveProductInfo(mostExpensiveProduct)
+}
 
 
-
+func printMostExpensiveProductInfo(_ productInfo: ProductInfo) {
+    print("------------------- Найдорожчий товар за процесором \(productInfo.4) -------------------------------")
+    print("Назва товару: \(productInfo.0), Ціна: \(productInfo.1) \(productInfo.2)")
+    printSeparatorLine()
+}
 
 /*
  
@@ -318,6 +478,14 @@ let cart: [ProductInfo] = [
  
  */
 
+enum ProcessorType: String {
+    case intel = "Intel"
+    case amd = "AMD"
+}
+
+var processor: ProcessorType = .intel
+
+print("Тип процесора: \(processor)")
 
 
 
@@ -335,10 +503,14 @@ let cart: [ProductInfo] = [
  створити змінну типу створенного enum з якимось із значень
  
  */
+enum Currency: String {
+    case uah = "UAH"
+    case usd = "USD"
+    case eur = "EUR"
+}
 
-
-
-
+var currency: Currency = .usd
+print("Валюта: \(currency)")
 
 /*
  
@@ -359,8 +531,17 @@ let cart: [ProductInfo] = [
  
  */
 
+struct MotherBoard {
+    var socet: String
+    var processor: ProcessorType
+    
+    init(socet: String, processor: ProcessorType) {
+        self.socet = socet
+        self.processor = processor
+    }
+}
 
-
+let motherBoard = MotherBoard(socet: "sAM4", processor: .intel)
 
 
 
@@ -382,4 +563,23 @@ let cart: [ProductInfo] = [
 
 
 
+class Product {
+    var productName: String
+    var productPrice: Double
+    var productCurrency: Currency
+    var motherBoard: MotherBoard
+    
+    init(productName: String,
+         productPrice: Double,
+         productCurrency: Currency = .usd,
+         motherBoard: MotherBoard = .init(socet: "sAM4", processor: .intel)) {
+        
+        self.productName = productName
+        self.productPrice = productPrice
+        self.productCurrency = productCurrency
+        self.motherBoard = motherBoard
+    }
+}
+
+let product = Product(productName: "Apple MacBook", productPrice: 5000.00)
 
